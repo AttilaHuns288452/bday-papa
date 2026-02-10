@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Happy Birthday Papa 🎂</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- 🎶 Background music (auto + loop) -->
+  <audio
+    id="bgMusic"
+    src="assets/musicbday.mp3"
+    autoplay
+    loop
+    playsinline
+    preload="auto"
+  ></audio>
+
+  <!-- 🔊 Sound effects -->
+  <audio id="bombSfx" src="assets/bombsound.mp3" preload="auto"></audio>
+  <audio id="gunSfx" src="assets/machineguncontsound.mp3" preload="auto"></audio>
+
+  <!-- 🍺 SIDE IMAGES -->
+  <img src="assets/redhorse.jpg" class="side-img left-img" alt="Red Horse Beer">
+  <img src="assets/smpalepilsen.jpg" class="side-img right-img" alt="San Miguel Pale Pilsen">
+
+  <div class="overlay"></div>
+
+  <main class="center-wrap">
+    <div class="cake-card">
+
+      <img src="assets/fatherphoto.jpg" alt="Papa" class="cake-img" />
+
+      <h1>🎉 Happy Birthday Papa 🎉</h1>
+
+      <p class="message">
+        💣💥🔫🔥💥💣<br>
+        🏍️🏍️🐎🔥<br>
+        🍺🍻🥃🍾<br>
+        💥🔥💣🔫<br>
+        🏍️🐎🍺🔥
+      </p>
+
+      <!-- 🔥 Ghost Rider GIF -->
+      <div class="gif-wrap">
+        <div
+          class="tenor-gif-embed"
+          data-postid="26074678"
+          data-share-method="host"
+          data-aspect-ratio="1.87135"
+          data-width="100%">
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script async src="https://tenor.com/embed.js"></script>
+
+  <script>
+    const bgMusic = document.getElementById("bgMusic");
+    const bombSfx = document.getElementById("bombSfx");
+    const gunSfx  = document.getElementById("gunSfx");
+
+    bgMusic.volume = 0.85;
+
+    // Try autoplay immediately
+    window.addEventListener("load", () => {
+      bgMusic.play().catch(() => {});
+    });
+
+    // Force-enable sound on ANY interaction (no button needed)
+    const enableSound = () => {
+      if (bgMusic.paused) {
+        bgMusic.play().catch(() => {});
+      }
+    };
+
+    document.addEventListener("click", enableSound);
+    document.addEventListener("touchstart", enableSound);
+    document.addEventListener("keydown", enableSound);
+
+    // 💣🔫 CLICK EFFECTS
+    const emojis = ["💣","💥","🔫","🔥","🍺","🍻","🏍️","🐎"];
+
+    function playSfx(type){
+      if(type === "bomb"){
+        bombSfx.currentTime = 0;
+        bombSfx.volume = 0.9;
+        bombSfx.play().catch(()=>{});
+      } else {
+        gunSfx.currentTime = 0;
+        gunSfx.volume = 0.7;
+        gunSfx.play().catch(()=>{});
+        setTimeout(() => gunSfx.pause(), 220);
+      }
+    }
+
+    function boom(x,y){
+      for(let i=0;i<7;i++){
+        const fx = document.createElement("div");
+        fx.className = "fx";
+        fx.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        fx.style.left = (x + Math.random()*60 - 30) + "px";
+        fx.style.top  = (y + Math.random()*60 - 30) + "px";
+        document.body.appendChild(fx);
+        setTimeout(()=>fx.remove(),800);
+      }
+
+      document.body.classList.add("shake");
+      setTimeout(()=>document.body.classList.remove("shake"),250);
+
+      const flash = document.createElement("div");
+      flash.className = "flash";
+      document.body.appendChild(flash);
+      setTimeout(()=>flash.remove(),200);
+
+      playSfx(Math.random() < 0.45 ? "bomb" : "gun");
+    }
+
+    document.addEventListener("click", (e)=>{
+      boom(e.clientX, e.clientY);
+    });
+
+    // 💥 Startup explosions
+    window.addEventListener("load", ()=>{
+      const cx = innerWidth/2;
+      const cy = innerHeight/2;
+      setTimeout(()=>boom(cx,cy),400);
+      setTimeout(()=>boom(cx-150,cy+40),700);
+      setTimeout(()=>boom(cx+150,cy-40),1000);
+    });
+  </script>
+
+</body>
+</html>
